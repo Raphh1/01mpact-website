@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenPrompt 🌱</title>
   <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
   <div class="container">
     <h1>GreenPrompt 🌱</h1>
@@ -18,13 +20,89 @@
         <li>Les data centers représentent 1% de la consommation électrique mondiale.</li>
         <li>Streaming 1h en HD = 300g de CO₂.</li>
       </ul>
-      
+
       <div class="impact-meter">
         <h3>Impact de vos requêtes IA</h3>
         <div class="progress-container">
           <div id="carbon-progress" class="progress-bar"></div>
         </div>
         <p>Empreinte carbone estimée: <span id="carbon-value">0</span> g de CO₂</p>
+      </div>
+    </section>
+
+    <section id="eco-calculator">
+      <h2>Calcule ton empreinte numérique 🔍</h2>
+      <p class="calculator-intro">Réponds à ces quelques questions pour estimer ton impact numérique quotidien :</p>
+
+      <div class="calculator-form">
+        <div class="form-group">
+          <label for="email-usage">Nombre d'emails envoyés par jour :</label>
+          <input type="range" id="email-usage" min="0" max="50" value="10" oninput="updateCalculator()">
+          <span id="email-value">10</span> emails
+        </div>
+
+        <div class="form-group">
+          <label for="streaming-usage">Heures de streaming vidéo par jour :</label>
+          <input type="range" id="streaming-usage" min="0" max="10" value="2" step="0.5" oninput="updateCalculator()">
+          <span id="streaming-value">2</span> heures
+        </div>
+
+        <div class="form-group">
+          <label for="gaming-usage">Heures de jeux vidéo par jour :</label>
+          <input type="range" id="gaming-usage" min="0" max="10" value="1" step="0.5" oninput="updateCalculator()">
+          <span id="gaming-value">1</span> heures
+        </div>
+
+        <div class="form-group">
+          <label for="ai-usage">Requêtes IA par jour :</label>
+          <input type="range" id="ai-usage" min="0" max="50" value="5" oninput="updateCalculator()">
+          <span id="ai-value">5</span> requêtes
+        </div>
+
+        <div class="form-group">
+          <label for="cloud-usage">Go stockés dans le cloud :</label>
+          <input type="range" id="cloud-usage" min="0" max="1000" value="50" oninput="updateCalculator()">
+          <span id="cloud-value">50</span> Go
+        </div>
+
+        <div class="form-group">
+          <label>Appareils possédés :</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="device-smartphone" checked onclick="updateCalculator()">
+              Smartphone</label>
+            <label><input type="checkbox" id="device-laptop" checked onclick="updateCalculator()"> Ordinateur
+              portable</label>
+            <label><input type="checkbox" id="device-tablet" onclick="updateCalculator()"> Tablette</label>
+            <label><input type="checkbox" id="device-desktop" onclick="updateCalculator()"> Ordinateur fixe</label>
+            <label><input type="checkbox" id="device-smartwatch" onclick="updateCalculator()"> Montre connectée</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="calculator-result">
+        <h3>Ton empreinte numérique estimée</h3>
+        <div class="result-container">
+          <div class="result-box">
+            <span id="daily-footprint">0</span>
+            <span class="unit">g CO₂/jour</span>
+            <span class="label">Impact quotidien</span>
+          </div>
+          <div class="result-box">
+            <span id="yearly-footprint">0</span>
+            <span class="unit">kg CO₂/an</span>
+            <span class="label">Impact annuel</span>
+          </div>
+          <div class="result-box equivalent">
+            <span id="equivalent">0</span>
+            <span class="label">km en voiture / an</span>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <h4>Comment réduire mon impact?</h4>
+          <p id="personalized-tip">Réduire ta consommation de streaming pourrait significativement diminuer ton
+            empreinte.</p>
+        </div>
       </div>
     </section>
 
@@ -62,7 +140,7 @@
         <li>Privilégie la recherche locale (documentation offline, livres).</li>
       </ul>
     </section>
-    
+
     <section>
       <h2>En savoir plus</h2>
       <ul class="resources">
@@ -80,4 +158,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
