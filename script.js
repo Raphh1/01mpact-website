@@ -1,12 +1,6 @@
-// Fonctionnalité existante
-let clicks = 0;
-function incrementClicks() {
-  clicks++;
-  document.getElementById('click-count').innerText = clicks;
-  updateCarbonFootprint(10); 
-}
-
 let carbonFootprint = 0;
+
+// Fonction pour mettre à jour l'empreinte carbone
 function updateCarbonFootprint(value) {
   carbonFootprint += value;
   const carbonElement = document.getElementById('carbon-value');
@@ -21,123 +15,134 @@ function updateCarbonFootprint(value) {
   }
 }
 
-// Mini-jeu Éco-Défenseur IA
-const game = {
-  isActive: false,
+// Jeu de tri des prompts
+const promptGame = {
+  prompts: [],
+  currentPromptIndex: 0,
   score: 0,
-  timeLeft: 30,
-  timer: null,
-  goodItemsClicked: 0,
-  badItemsClicked: 0,
 
-  start() {
-    // Réinitialisation
-    this.isActive = true;
-    this.score = 0;
-    this.timeLeft = 30;
-    this.goodItemsClicked = 0;
-    this.badItemsClicked = 0;
+  async init() {
+    try {
+      // Charger les prompts depuis le fichier JSON
+      const response = await fetch('data/prompts.json');
+      const data = await response.json();
+      this.prompts = data.prompts;
 
-    // Mise à jour de l'interface
-    document.getElementById('game-score').innerText = this.score;
-    document.getElementById('game-timer').innerText = this.timeLeft;
-    document.getElementById('game-results').style.display = 'none';
+      // Mélanger les prompts
+      this.shufflePrompts();
 
-    // Vider la zone de jeu
-    const gameArea = document.getElementById('game-area');
-    gameArea.innerHTML = '';
+      // Mettre à jour l'affichage du total
+      document.getElementById('prompt-total').innerText = this.prompts.length;
+      document.getElementById('final-total').innerText = this.prompts.length;
 
-    // Démarrer le timer
-    this.timer = setInterval(() => {
-      this.timeLeft--;
-      document.getElementById('game-timer').innerText = this.timeLeft;
+      // Initialiser les événements
+      document.getElementById('prompt-useful').addEventListener('click', () => this.evaluateAnswer('utile'));
+      document.getElementById('prompt-useless').addEventListener('click', () => this.evaluateAnswer('inutile'));
+      document.getElementById('next-prompt').addEventListener('click', () => this.showNextPrompt());
+      document.getElementById('restart-prompt-game').addEventListener('click', () => this.restart());
 
-      if (this.timeLeft <= 0) {
-        this.end();
-      }
-    }, 1000);
-
-    // Générer des éléments
-    this.generateItems();
-  },
-
-  generateItems() {
-    if (!this.isActive) return;
-
-    const gameArea = document.getElementById('game-area');
-    const isGood = Math.random() > 0.4; // 60% de chance d'être une bonne requête
-
-    const item = document.createElement('div');
-    item.className = `game-item ${isGood ? 'good-item' : 'bad-item'}`;
-    item.innerText = isGood ? '✓' : '✗';
-
-    // Position aléatoire
-    const maxX = gameArea.clientWidth - 50;
-    const maxY = gameArea.clientHeight - 50;
-    const posX = Math.floor(Math.random() * maxX);
-    const posY = Math.floor(Math.random() * maxY);
-
-    item.style.left = posX + 'px';
-    item.style.top = posY + 'px';
-
-    // Ajouter l'événement de clic
-    item.addEventListener('click', () => {
-      if (!this.isActive) return;
-
-      if (isGood) {
-        this.score += 10;
-        this.goodItemsClicked++;
-      } else {
-        this.score = Math.max(0, this.score - 5);
-        this.badItemsClicked++;
-      }
-
-      document.getElementById('game-score').innerText = this.score;
-      gameArea.removeChild(item);
-    });
-
-    gameArea.appendChild(item);
-
-    // Animation de disparition
-    setTimeout(() => {
-      if (gameArea.contains(item)) {
-        gameArea.removeChild(item);
-      }
-    }, 2000);
-
-    // Générer un autre élément après un délai aléatoire
-    const nextDelay = 500 + Math.random() * 1000;
-    if (this.isActive) {
-      setTimeout(() => this.generateItems(), nextDelay);
+      // Afficher le premier prompt
+      this.showCurrentPrompt();
+    } catch (error) {
+      console.error('Erreur lors du chargement des prompts:', error);
+      document.getElementById('current-prompt').innerText = 'Erreur lors du chargement des prompts. Vérifie que le fichier JSON est accessible.';
     }
   },
 
-  end() {
-    this.isActive = false;
-    clearInterval(this.timer);
+  shufflePrompts() {
+    // Algorithme de Fisher-Yates pour mélanger les prompts
+    for (let i = this.prompts.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.prompts[i], this.prompts[j]] = [this.prompts[j], this.prompts[i]];
+    }
+  },
 
-    // Nettoyer la zone de jeu
-    const gameArea = document.getElementById('game-area');
-    gameArea.innerHTML = '';
+  showCurrentPrompt() {
+    if (this.currentPromptIndex < this.prompts.length) {
+      const prompt = this.prompts[this.currentPromptIndex];
+      document.getElementById('current-prompt').innerText = `"${prompt.text}"`;
+      document.getElementById('prompt-result').style.display = 'none';
 
-    // Calculer le CO2 économisé (chaque bonne requête = 20g économisés)
-    const savedCO2 = this.goodItemsClicked * 20 - this.badItemsClicked * 10;
-    document.getElementById('saved-carbon').innerText = Math.max(0, savedCO2);
+      // Mettre à jour la barre de progression
+      const progressPercentage = (this.currentPromptIndex / this.prompts.length) * 100;
+      document.getElementById('prompt-progress').style.width = `${progressPercentage}%`;
+    } else {
+      this.endGame();
+    }
+  },
 
-    // Afficher les résultats
-    document.getElementById('game-results').style.display = 'block';
+  evaluateAnswer(answer) {
+    const currentPrompt = this.prompts[this.currentPromptIndex];
+    const isCorrect = answer === currentPrompt.category;
 
-    // Ajouter un bouton pour recommencer
-    const restartButton = document.createElement('button');
-    restartButton.id = 'start-game';
-    restartButton.innerText = 'Recommencer';
-    restartButton.addEventListener('click', () => this.start());
-    gameArea.appendChild(restartButton);
+    // Afficher le résultat
+    const resultElement = document.getElementById('result-correct');
+    if (isCorrect) {
+      resultElement.innerText = "✅ Correct!";
+      resultElement.className = "result-message correct";
+      this.score++;
+    } else {
+      resultElement.innerText = "❌ Incorrect!";
+      resultElement.className = "result-message incorrect";
+    }
 
-    // Mise à jour du compteur global
-    const globalSaved = document.getElementById('global-saved');
-    const currentValue = parseInt(globalSaved.innerText);
-    globalSaved.innerText = currentValue + Math.max(0, savedCO2);
+    // Afficher l'explication
+    document.getElementById('result-explanation').innerText = currentPrompt.explanation;
+
+    // Mettre à jour le score
+    document.getElementById('prompt-score').innerText = this.score;
+
+    // Afficher le résultat
+    document.getElementById('prompt-result').style.display = 'block';
+  },
+
+  showNextPrompt() {
+    this.currentPromptIndex++;
+    this.showCurrentPrompt();
+  },
+
+  endGame() {
+    // Mettre à jour les scores finaux
+    document.getElementById('final-score').innerText = this.score;
+
+    // Générer un message basé sur le score
+    const percentage = (this.score / this.prompts.length) * 100;
+    let gif = "";
+    let message = '';
+
+    if (percentage >= 90) {
+      gif = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjJldzJlOGNhamt3Y3puaDE5am5pM3MybjlqangwNXIxNHI2eXE5NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/111ebonMs90YLu/giphy.gif";
+      message = "Excellent! Tu as parfaitement compris comment utiliser l'IA de manière responsable!";
+    } else if (percentage >= 70) {
+      gif = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDN4cXJ4OGJnYnAyb3Q5ZXVob3o2NmR3cjNhYjVkOGQyYjJzY296YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/d3mlE7uhX8KFgEmY/giphy.gif";
+      message = "Très bien! Tu as une bonne compréhension de l'impact des requêtes IA.";
+    } else if (percentage >= 50) {
+      gif = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjFiNnVwem1yY2U2dm4wY2huZWoxdHJpc3V4ZmR3bTB3YXNlaGtpZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pHy10lSVfnAZeWLHta/giphy.gif";
+      message = "Pas mal! Avec un peu plus de pratique, tu deviendras un expert de l'IA éco-responsable.";
+    } else {
+      gif = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXlwd3NlMnF0dHQwdzFlMHptcmNlcXVwbTNxbmJyY3BjY3VuZzloZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ULfvKnN48BHMs/giphy.gif"
+      message = "Continue à apprendre! L'IA est un outil puissant, mais il faut l'utiliser avec discernement.";
+    }
+
+    document.getElementById('score-gif').src = gif;
+    document.getElementById('score-message').innerText = message;
+
+    // Afficher l'écran de fin
+    document.getElementById('prompt-game-end').style.display = 'block';
+  },
+
+  restart() {
+    // Réinitialiser le jeu
+    this.currentPromptIndex = 0;
+    this.score = 0;
+    document.getElementById('prompt-score').innerText = this.score;
+    document.getElementById('prompt-game-end').style.display = 'none';
+
+    // Mélanger à nouveau les prompts
+    this.shufflePrompts();
+
+    // Afficher le premier prompt
+    this.showCurrentPrompt();
   }
 };
 
@@ -157,20 +162,20 @@ function updateCalculator() {
   document.getElementById('ai-value').innerText = aiRequests;
   document.getElementById('cloud-value').innerText = cloudStorage;
 
-  // Calcul des empreintes par catégorie (en g CO2)
-  const emailFootprint = emailCount * 4; // ~4g CO2 par email
-  const streamingFootprint = streamingHours * 150; // ~150g CO2 par heure (moyenne qualité)
-  const gamingFootprint = gamingHours * 120; // ~120g CO2 par heure de jeu en ligne
-  const aiFootprint = aiRequests * 10; // ~10g CO2 par requête IA
-  const cloudFootprint = cloudStorage * 0.015; // ~0.015g CO2 par Go par jour
+  // Calcul des empreintes par catégorie (en g CO2e)
+  const emailFootprint = emailCount * 4; // ~4g CO2e par email
+  const streamingFootprint = streamingHours * 55; // 55g CO2e par heure selon Carbon Trust
+  const gamingFootprint = gamingHours * 130; // 130g CO2e par heure de jeu en ligne
+  const aiFootprint = aiRequests * 4.32; // 4,32g CO2e par requête IA
+  const cloudFootprint = cloudStorage * 0.015; // ~0.015g CO2e par Go par jour
 
   // Calcul pour les appareils
   let deviceFootprint = 0;
-  if (document.getElementById('device-smartphone').checked) deviceFootprint += 30;
-  if (document.getElementById('device-laptop').checked) deviceFootprint += 40;
-  if (document.getElementById('device-tablet').checked) deviceFootprint += 25;
-  if (document.getElementById('device-desktop').checked) deviceFootprint += 55;
-  if (document.getElementById('device-smartwatch').checked) deviceFootprint += 10;
+  if (document.getElementById('device-smartphone').checked) deviceFootprint += 61; // 61g CO2e par jour
+  if (document.getElementById('device-laptop').checked) deviceFootprint += 560; // 560g CO2e par jour
+  if (document.getElementById('device-tablet').checked) deviceFootprint += 56; // 56g CO2e par jour 
+  if (document.getElementById('device-desktop').checked) deviceFootprint += 2780; //2780g CO2e par jour
+  if (document.getElementById('device-smartwatch').checked) deviceFootprint += 5.4; //5.4g CO2e par jour
 
   // Calcul total quotidien
   const dailyFootprint = emailFootprint + streamingFootprint + gamingFootprint + aiFootprint + cloudFootprint + deviceFootprint;
@@ -191,13 +196,13 @@ function updateCalculator() {
   const highestImpact = Math.max(emailFootprint, streamingFootprint, gamingFootprint, aiFootprint, cloudFootprint);
 
   if (highestImpact === streamingFootprint && streamingHours > 1) {
-    tip = 'Réduire ton streaming de 30 minutes par jour économiserait ' + Math.round(0.5 * 150 * 365 / 1000) + ' kg de CO₂ par an.';
+    tip = 'Réduire ton streaming de 30 minutes par jour économiserait ' + Math.round(0.5 * 55 * 365 / 1000) + ' kg de CO₂e par an.';
   } else if (highestImpact === gamingFootprint && gamingHours > 1) {
-    tip = 'Réduire ton temps de jeu de 30 minutes par jour économiserait ' + Math.round(0.5 * 120 * 365 / 1000) + ' kg de CO₂ par an.';
+    tip = 'Réduire ton temps de jeu de 30 minutes par jour économiserait ' + Math.round(0.5 * 130 * 365 / 1000) + ' kg de CO₂e par an.';
   } else if (highestImpact === emailFootprint && emailCount > 10) {
-    tip = 'Nettoie ta boîte mail et réduis tes envois pour économiser jusqu\'à ' + Math.round(emailCount * 0.2 * 4 * 365 / 1000) + ' kg de CO₂ par an.';
+    tip = 'Nettoie ta boîte mail et réduis tes envois pour économiser jusqu\'à ' + Math.round(emailCount * 0.2 * 4 * 365 / 1000) + ' kg de CO₂e par an.';
   } else if (highestImpact === aiFootprint && aiRequests > 5) {
-    tip = 'Réduire tes requêtes IA de moitié économiserait ' + Math.round((aiRequests / 2) * 10 * 365 / 1000) + ' kg de CO₂ par an.';
+    tip = 'Réduire tes requêtes IA de moitié économiserait ' + Math.round((aiRequests / 2) * 4.32 * 365 / 1000) + ' kg de CO₂e par an.';
   } else if (cloudStorage > 100) {
     tip = 'Nettoyer tes fichiers cloud pourrait réduire ton empreinte de stockage de ' + Math.round(cloudStorage * 0.2 * 0.015 * 365 / 1000) + ' kg par an.';
   } else {
@@ -212,19 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialiser le compteur de carbone
   updateCarbonFootprint(0);
 
-  // Configurer le jeu
-  const startButton = document.getElementById('start-game');
-  if (startButton) {
-    startButton.addEventListener('click', () => game.start());
-  }
-
-  const restartButton = document.getElementById('restart-game');
-  if (restartButton) {
-    restartButton.addEventListener('click', () => game.start());
-  }
-
   // Initialiser le calculateur
   if (document.getElementById('email-usage')) {
     updateCalculator();
   }
+
+  // Initialiser le jeu de tri des prompts
+  promptGame.init();
 });

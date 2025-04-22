@@ -1,0 +1,104 @@
+{
+    "prompts": [
+        {
+            "text": "Explique-moi comment fonctionne la photosynthèse pour un exposé scolaire.",
+            "category": "utile",
+            "explanation": "Ce prompt demande une information éducative spécifique avec un objectif clair."
+        },
+        {
+            "text": "Peux-tu me résumer les principaux points de l'accord de Paris sur le climat?",
+            "category": "utile",
+            "explanation": "Cette demande concerne une information factuelle importante pour comprendre un enjeu mondial."
+        },
+        {
+            "text": "Comment optimiser la consommation d'énergie de mon application mobile?",
+            "category": "utile",
+            "explanation": "Cette question vise à améliorer l'efficacité énergétique, ce qui est bénéfique pour l'environnement."
+        },
+        {
+            "text": "Salut, ça va?",
+            "category": "inutile",
+            "explanation": "Cette requête ne demande pas d'information substantielle et consomme des ressources pour une simple conversation."
+        },
+        {
+            "text": "Raconte-moi une blague.",
+            "category": "inutile",
+            "explanation": "Ce type de demande de divertissement simple pourrait être évité pour réduire l'empreinte numérique."
+        },
+        {
+            "text": "Écris-moi un poème sur les nuages.",
+            "category": "inutile",
+            "explanation": "Demander du contenu créatif sans objectif précis est généralement évitable."
+        },
+        {
+            "text": "Aide-moi à déboguer ce code: function calculateTax() { const amount = price * 0.2; retrun amount; }",
+            "category": "utile",
+            "explanation": "Ce prompt aide à résoudre un problème technique précis qui pourrait économiser du temps et des ressources."
+        },
+        {
+            "text": "Quelles sont les meilleures pratiques pour réduire ma consommation d'eau à la maison?",
+            "category": "utile",
+            "explanation": "Cette question vise à adopter des comportements plus écologiques."
+        },
+        {
+            "text": "Je m'ennuie, que devrais-je faire?",
+            "category": "inutile",
+            "explanation": "Cette requête vague pourrait être remplacée par une réflexion personnelle sans solliciter l'IA."
+        },
+        {
+            "text": "Qu'est-ce que tu penses de cette image?",
+            "category": "inutile",
+            "explanation": "Sans contexte ou objectif, demander une opinion subjective sur une image est rarement nécessaire."
+        },
+        {
+            "text": "Comment puis-je créer un compost dans mon appartement?",
+            "category": "utile",
+            "explanation": "Cette demande vise à adopter une pratique écologique concrète."
+        },
+        {
+            "text": "Dis-moi bonjour en 10 langues différentes.",
+            "category": "inutile",
+            "explanation": "Cette information peut facilement être trouvée avec une recherche simple et n'a pas d'application immédiate."
+        },
+        {
+            "text": "Analyse les avantages et inconvénients des voitures électriques par rapport aux voitures à essence.",
+            "category": "utile",
+            "explanation": "Cette demande permet d'obtenir des informations pour prendre une décision ayant un impact environnemental."
+        },
+        {
+            "text": "Peux-tu me faire un résumé de cette réunion? [transcription de 30 minutes]",
+            "category": "utile",
+            "explanation": "Ce prompt permet d'économiser du temps et de l'énergie en synthétisant une grande quantité d'information."
+        },
+        {
+            "text": "Génère-moi 20 idées de posts pour les réseaux sociaux.",
+            "category": "inutile",
+            "explanation": "Demander une grande quantité de contenu générique à des fins promotionnelles a un impact environnemental important."
+        },
+        {
+            "text": "Comment puis-je réduire ma consommation électrique à la maison?",
+            "category": "utile",
+            "explanation": "Cette question cherche des moyens concrets pour réduire son empreinte écologique."
+        },
+        {
+            "text": "Écris-moi une liste de courses pour la semaine.",
+            "category": "inutile",
+            "explanation": "Ce type de tâche personnelle peut être fait soi-même sans solliciter l'IA."
+        },
+        {
+            "text": "Quels sont les aliments de saison en ce moment dans ma région?",
+            "category": "utile",
+            "explanation": "Cette information aide à faire des choix de consommation plus écologiques et locaux."
+        },
+        {
+            "text": "Je ne sais pas quoi regarder ce soir, donne-moi des idées de films.",
+            "category": "inutile",
+            "explanation": "Les recommandations de divertissement peuvent être obtenues via des plateformes dédiées qui ont déjà traité ces données."
+        },
+        {
+            "text": "Peux-tu m'expliquer comment fonctionne la vaccination pour que je puisse l'expliquer à mon enfant?",
+            "category": "utile",
+            "explanation": "Cette demande a un objectif éducatif et de santé publique important."
+        }
+    ]
+}

@@ -4,34 +4,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GreenPrompt 🌱</title>
+  <title>01mpact🌱</title>
+  <link rel="icon" content="🌱">
   <link href="style.css" rel="stylesheet">
+  <script src="script.js"></script>
 </head>
 
 <body>
   <div class="container">
-    <h1>GreenPrompt 🌱</h1>
-    <p class="intro">Réduis ton empreinte numérique en limitant les requêtes inutiles à l’IA</p>
+    <div class="title-container">
+      <h1>01mpact <span class="emoji-accent">🌱</span></h1>
+      <p class="intro">Prends conscience de ton empreinte numérique et agis pour la réduire</p>
+    </div>
 
     <section>
       <h2>Le saviez-vous ?</h2>
       <ul>
-        <li>Une requête IA peut consommer 10x plus qu’une recherche classique.</li>
-        <li>Les data centers représentent 1% de la consommation électrique mondiale.</li>
-        <li>Streaming 1h en HD = 300g de CO₂.</li>
+        <li><span class="saviez-vous"><strong>Une requête à une IA</strong> (comme ChatGPT) émet environ <strong>4,3 g
+              de CO₂e</strong> – soit 20
+            fois plus qu'une recherche Google classique (~0,2 g).</span></li>
+        <li><span class="saviez-vous"><strong>Les data centers</strong> consomment environ <strong>1 à 2 %</strong> de
+            l'électricité mondiale,
+            mais leur empreinte carbone diminue grâce à l'amélioration des infrastructures.</span></li>
+        <li><span class="saviez-vous"><strong>Regarder 1h de vidéo en HD</strong> génère en moyenne <strong>55 g de
+              CO₂e</strong>, l'équivalent
+            d'une ampoule LED allumée pendant 5h.</span></li>
+        <li><span class="saviez-vous"><strong>Jouer 1h à un jeu vidéo</strong> sur console ou PC peut produire jusqu'à
+            <strong>130 g de
+              CO₂e</strong>, surtout si l'équipement est énergivore.</span></li>
+        <li><span class="saviez-vous"><strong>Un e-mail avec pièce jointe</strong> (1 Mo) représente environ <strong>4 g
+              de CO₂e</strong>, soit
+            l'équivalent d'une bouilloire électrique allumée pendant 10 secondes.</span></li>
       </ul>
+    </section>
 
-      <div class="impact-meter">
-        <h3>Impact de vos requêtes IA</h3>
-        <div class="progress-container">
-          <div id="carbon-progress" class="progress-bar"></div>
+    <!-- Section pour le jeu de tri de prompts -->
+    <section id="prompt-game">
+      <h2>🧠 Le tri des prompts IA</h2>
+      <p class="game-instructions">Évalue si chaque prompt est <strong>utile</strong> ou <strong>inutile</strong> pour
+        réduire ton empreinte numérique.</p>
+
+      <div class="prompt-game-container">
+        <div class="prompt-card">
+          <p id="current-prompt">Chargement des prompts...</p>
+          <div class="prompt-buttons">
+            <button id="prompt-useful" class="prompt-button useful">Utile</button>
+            <button id="prompt-useless" class="prompt-button useless">Inutile</button>
+          </div>
         </div>
-        <p>Empreinte carbone estimée: <span id="carbon-value">0</span> g de CO₂</p>
+
+        <div class="prompt-result" id="prompt-result" style="display: none;">
+          <h3>Résultat</h3>
+          <p id="result-correct" class="result-message"></p>
+          <p id="result-explanation"></p>
+          <button id="next-prompt">Question suivante</button>
+        </div>
+
+        <div class="prompt-stats">
+          <p>Score: <span id="prompt-score">0</span> / <span id="prompt-total">0</span></p>
+          <div class="progress-container">
+            <div id="prompt-progress" class="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-game-end" id="prompt-game-end" style="display: none;">
+        <h3>🎉 Fin du jeu!</h3>
+        <p>Ton score final: <span id="final-score">0</span> / <span id="final-total">0</span></p>
+        <img id="score-gif"></img>
+        <p id="score-message"></p>
+        <button id="restart-prompt-game">Rejouer</button>
       </div>
     </section>
 
     <section id="eco-calculator">
-      <h2>Calcule ton empreinte numérique 🔍</h2>
+      <h2>🔍 Calcule ton empreinte numérique</h2>
       <p class="calculator-intro">Réponds à ces quelques questions pour estimer ton impact numérique quotidien :</p>
 
       <div class="calculator-form">
@@ -68,17 +115,20 @@
         <div class="form-group">
           <label>Appareils possédés :</label>
           <div class="checkbox-group">
-            <label><input type="checkbox" id="device-smartphone" checked onclick="updateCalculator()">
+            <label class="checkbox"><input type="checkbox" id="device-smartphone" checked onclick="updateCalculator()">
               Smartphone</label>
-            <label><input type="checkbox" id="device-laptop" checked onclick="updateCalculator()"> Ordinateur
+            <label class="checkbox"><input type="checkbox" id="device-laptop" checked onclick="updateCalculator()">
+              Ordinateur
               portable</label>
-            <label><input type="checkbox" id="device-tablet" onclick="updateCalculator()"> Tablette</label>
-            <label><input type="checkbox" id="device-desktop" onclick="updateCalculator()"> Ordinateur fixe</label>
-            <label><input type="checkbox" id="device-smartwatch" onclick="updateCalculator()"> Montre connectée</label>
+            <label class="checkbox"><input type="checkbox" id="device-tablet" onclick="updateCalculator()">
+              Tablette</label>
+            <label class="checkbox"><input type="checkbox" id="device-desktop" onclick="updateCalculator()"> Ordinateur
+              fixe</label>
+            <label class="checkbox"><input type="checkbox" id="device-smartwatch" onclick="updateCalculator()"> Montre
+              connectée</label>
           </div>
         </div>
       </div>
-
       <div class="calculator-result">
         <h3>Ton empreinte numérique estimée</h3>
         <div class="result-container">
@@ -107,56 +157,40 @@
     </section>
 
     <section>
-      <h2>Mini-jeu : Éco-Défenseur IA</h2>
-      <p class="game-instructions">Attrape les requêtes utiles (vertes) et évite les inutiles (rouges)!</p>
-      <div class="game-stats">
-        <p>Score: <span id="game-score">0</span></p>
-        <p>Temps: <span id="game-timer">30</span>s</p>
-      </div>
-      <div id="game-container">
-        <div id="game-area">
-          <button id="start-game">Commencer le jeu</button>
-        </div>
-      </div>
-      <div class="game-results" id="game-results" style="display: none;">
-        <h3>Résultats</h3>
-        <p>Tu as économisé l'équivalent de <span id="saved-carbon">0</span>g de CO₂!</p>
-        <button id="restart-game">Rejouer</button>
-      </div>
-    </section>
-
-    <section id="click-counter">
-      <h2>Mini-jeu : Évite les clics inutiles</h2>
-      <p>Tu as cliqué <span id="click-count">0</span> fois ! Essaie de réduire 🤖</p>
-      <button onclick="incrementClicks()">Envoyer une requête IA</button>
-    </section>
-
-    <section>
-      <h2>Conseils pratiques 🌍</h2>
-      <ul>
-        <li>Désactive la lecture automatique des vidéos.</li>
-        <li>Désinstalle les apps que tu n’utilises pas.</li>
-        <li>Utilise les IA avec intention, pas par réflexe.</li>
-        <li>Privilégie la recherche locale (documentation offline, livres).</li>
+      <h2>🌍 Conseils pratiques</h2>
+      <ul class="tips-list">
+        <li>Désactive la lecture automatique des vidéos pour économiser de l'énergie et des données.</li>
+        <li>Désinstalle les apps que tu n'utilises pas pour libérer de l'espace et réduire la consommation.</li>
+        <li>Utilise les IA avec intention et conscience, pas par réflexe ou pour des tâches simples.</li>
+        <li>Privilégie la recherche locale (documentation, livres) plutôt que des requêtes en ligne répétées.</li>
       </ul>
     </section>
 
     <section>
       <h2>En savoir plus</h2>
       <ul class="resources">
-        <li><a href="#">Impact environnemental de l'IA (rapport 2024)</a></li>
-        <li><a href="#">Calculer son empreinte numérique</a></li>
-        <li><a href="#">Guide des bonnes pratiques pour un usage responsable de l'IA</a></li>
+        <li><a
+            href="https://ctprodstorageaccountp.blob.core.windows.net/prod-drupal-files/documents/resource/public/Carbon-impact-of-video-streaming.pdf">Carbon
+            impact of video streaming</a></li>
+        <li><a
+            href="https://carboncredits.com/how-much-carbon-does-video-game-emit-industrys-co2-footprint-revealed/">How
+            Much Carbon Do Video Games Emit? Industry’s CO2 Footprint Revealed</a></li>
+        <li><a href="https://piktochart.com/blog/carbon-footprint-of-chatgpt/">Gen AI’s Environmental Ledger: A Closer
+            Look at the Carbon Footprint of ChatGPT</a></li>
+        <li><a
+            href="https://www.sami.eco/blog/empreinte-carbone-email#:~:text=1%20mail%20avec%20pièce%20jointe,spam%20émet%200%2C3%20gCO2e">Empreinte
+            carbone d'un e-mail : mythes, réalités et solutions</a></li>
+        <li><a
+            href="https://greenly.earth/leaf-media/data-stories/l-impact-environnemental-de-nos-smartphones-ordinateurs-et-televisions">L’impact environnemental de nos smartphones, ordinateurs et télévisions</a></li>
+        <li><a
+            href="https://www.greenit.fr/2011/02/10/quelle-est-l-empreinte-carbone-d-un-ordinateur/">Quelle est l’empreinte carbone d’un ordinateur ?
+          </a></li>
+        <li><a
+            href="https://fr.wikipedia.org/wiki/Smartwatch">Wikipedia page Smartwatch</a></li>
       </ul>
     </section>
-
-    <footer>
-      Partage cette initiative 🌱 | GreenPrompt 2025
-      <div class="global-counter">Requêtes IA économisées globalement: <span id="global-saved">1245</span></div>
-    </footer>
+    <footer> Partage cette initiative 🌱 | 01mpact 2025 </footer>
   </div>
-
-  <script src="script.js"></script>
 </body>
 
 </html>
