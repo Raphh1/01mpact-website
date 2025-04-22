@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -19,9 +18,36 @@
         <li>Les data centers représentent 1% de la consommation électrique mondiale.</li>
         <li>Streaming 1h en HD = 300g de CO₂.</li>
       </ul>
+      
+      <div class="impact-meter">
+        <h3>Impact de vos requêtes IA</h3>
+        <div class="progress-container">
+          <div id="carbon-progress" class="progress-bar"></div>
+        </div>
+        <p>Empreinte carbone estimée: <span id="carbon-value">0</span> g de CO₂</p>
+      </div>
     </section>
 
     <section>
+      <h2>Mini-jeu : Éco-Défenseur IA</h2>
+      <p class="game-instructions">Attrape les requêtes utiles (vertes) et évite les inutiles (rouges)!</p>
+      <div class="game-stats">
+        <p>Score: <span id="game-score">0</span></p>
+        <p>Temps: <span id="game-timer">30</span>s</p>
+      </div>
+      <div id="game-container">
+        <div id="game-area">
+          <button id="start-game">Commencer le jeu</button>
+        </div>
+      </div>
+      <div class="game-results" id="game-results" style="display: none;">
+        <h3>Résultats</h3>
+        <p>Tu as économisé l'équivalent de <span id="saved-carbon">0</span>g de CO₂!</p>
+        <button id="restart-game">Rejouer</button>
+      </div>
+    </section>
+
+    <section id="click-counter">
       <h2>Mini-jeu : Évite les clics inutiles</h2>
       <p>Tu as cliqué <span id="click-count">0</span> fois ! Essaie de réduire 🤖</p>
       <button onclick="incrementClicks()">Envoyer une requête IA</button>
@@ -36,9 +62,19 @@
         <li>Privilégie la recherche locale (documentation offline, livres).</li>
       </ul>
     </section>
+    
+    <section>
+      <h2>En savoir plus</h2>
+      <ul class="resources">
+        <li><a href="#">Impact environnemental de l'IA (rapport 2024)</a></li>
+        <li><a href="#">Calculer son empreinte numérique</a></li>
+        <li><a href="#">Guide des bonnes pratiques pour un usage responsable de l'IA</a></li>
+      </ul>
+    </section>
 
     <footer>
       Partage cette initiative 🌱 | GreenPrompt 2025
+      <div class="global-counter">Requêtes IA économisées globalement: <span id="global-saved">1245</span></div>
     </footer>
   </div>
 
